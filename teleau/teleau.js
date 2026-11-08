@@ -127,10 +127,28 @@ function create_content_node(){
             </svg>
         </div>
     `
-    content.querySelector('.sm').addEventListener('click', () => {
-        content.classList.toggle('small')
-    })
     return content
+}
+
+function setup_sm(content){
+    let is_set = localStorage.getItem("teleau_settings_sm") == "да" ? true : false
+
+    if(is_set){
+        content.classList.add('small')
+    }
+
+    content.querySelector('.sm').addEventListener('click', () => {
+        if(is_set){
+            is_set = false
+            content.classList.remove('small')
+            localStorage.setItem("teleau_settings_sm", "нет")
+        }
+        else{
+            is_set = true
+            content.classList.add('small')
+            localStorage.setItem("teleau_settings_sm", "да")
+        }
+    })
 }
 
 async function get_sound_nodes(){
@@ -213,6 +231,8 @@ if(location.href.startsWith("https://telemost.yandex.ru/private-join")){
 
     let content = create_content_node()
     document.querySelector('body').appendChild(content)
+
+    setup_sm(content)
     
     let voice = content.querySelector('.voice')
     let demo = content.querySelector('.demo')

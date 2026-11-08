@@ -186,20 +186,20 @@ body.no-loading .teleau-content.loading * {
 
 
 
-.teleau-content.small {
+.teleau-content.small:not(.loading) {
     width: 2rem;
     height: 2rem;
     padding: 0;
     /* border-radius: 0.7rem; */
 }
 
-.teleau-content.small > *:not(.sm) {
+.teleau-content.small:not(.loading) > *:not(.sm) {
     opacity: 0;
     transform: scale(0.8);
     pointer-events: none;
 }
 
-.teleau-content.small .sm {
+.teleau-content.small:not(.loading) .sm {
     top: 0.225rem;
     right: 0.225rem;
 }
