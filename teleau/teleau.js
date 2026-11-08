@@ -35,6 +35,7 @@ function format_percent(value){
 
 function create_font_style(){
     const ASSETS_DIR = chrome.runtime.getURL('assets');
+    // const ASSETS_DIR = 'teleau/assets';
     
     let style = document.createElement("style");
     style.textContent = `
@@ -111,7 +112,24 @@ function create_content_node(){
                 <input type="range" min="0" max="1" value="1" step="0.0000001">
             </div>
         </div>
+        <div class="icon switch">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M7 3L3 7L7 11"/>
+                <path d="M3 7H17C19.2 7 21 8.8 21 11"/>
+                <path d="M17 13L21 17L17 21"/>
+                <path d="M21 17H7C4.8 17 3 15.2 3 13"/>
+            </svg>
+        </div>
+        <div class="icon sm">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M7 12H17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+        </div>
     `
+    content.querySelector('.sm').addEventListener('click', () => {
+        content.classList.toggle('small')
+    })
     return content
 }
 
@@ -134,11 +152,11 @@ async function load(content, voice, demo){
     let output_demo = demo.querySelector('.output')
 
     let sound_nodes = await get_sound_nodes()
-    let voice_sound_node = sound_nodes[1]
-    let demo_sound_node = sound_nodes[0]
+    // let sound_nodes = [{}, {}]
+    let voice_sound_node = sound_nodes[0]
+    let demo_sound_node = sound_nodes[1]
 
     settings = load_settings()
-    console.log(settings)
     voice_sound_node.volume = settings.voice
     demo_sound_node.volume = settings.demo
     line_voice.value = settings.voice
@@ -164,6 +182,21 @@ async function load(content, voice, demo){
         demo_sound_node.volume = value
         output_demo.innerText = format_percent(value)
         dump_settings(voice_value = null, demo_value = value)
+    })
+
+    content.querySelector('.switch').addEventListener('click', () => {
+        [voice_sound_node, demo_sound_node] = [demo_sound_node, voice_sound_node]
+        dump_settings(voice_value = line_demo.value, demo_value = line_voice.value)
+
+        settings = load_settings()
+        voice_sound_node.volume = settings.voice
+        demo_sound_node.volume = settings.demo
+        line_voice.value = settings.voice
+        line_demo.value = settings.demo
+        voice.style.setProperty("--len", `${settings.voice}`)
+        demo.style.setProperty("--len", `${settings.demo}`)
+        output_voice.innerText = format_percent(settings.voice)
+        output_demo.innerText = format_percent(settings.demo)
     })
 
     content.classList.remove('loading')
