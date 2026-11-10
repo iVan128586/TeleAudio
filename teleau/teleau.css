@@ -45,11 +45,11 @@ body.no-loading .teleau-content.loading * {
     transition: width 0.2s, height 0.2s, padding 0.2s;
 }
 
-.teleau-content.loading > * {
+.teleau-content.loading > *:not(.sm) {
     opacity: 0;
 } 
 
-.teleau-content.loading::after {
+.teleau-content.loading:not(.small)::after {
     content: "Загрузка...";
     position: absolute;
     inset: 0;
@@ -175,6 +175,7 @@ body.no-loading .teleau-content.loading * {
 .teleau-content .sm {
     top: 0.5rem;
     right: 0.5rem;
+    z-index: 999;
 }
 
 .teleau-content .switch {
@@ -186,20 +187,20 @@ body.no-loading .teleau-content.loading * {
 
 
 
-.teleau-content.small:not(.loading) {
+.teleau-content.small {
     width: 2rem;
     height: 2rem;
     padding: 0;
     /* border-radius: 0.7rem; */
 }
 
-.teleau-content.small:not(.loading) > *:not(.sm) {
+.teleau-content.small > *:not(.sm) {
     opacity: 0;
     transform: scale(0.8);
     pointer-events: none;
 }
 
-.teleau-content.small:not(.loading) .sm {
+.teleau-content.small .sm {
     top: 0.225rem;
     right: 0.225rem;
 }
